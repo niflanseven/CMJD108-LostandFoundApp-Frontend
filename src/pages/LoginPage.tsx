@@ -8,14 +8,18 @@ const LoginPage: React.FC = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const validateLogin = (email: string, password: string): string | null => {
+    if (!email.includes('@')) return 'Invalid email format';
+    if (password.length < 6) return 'Password must be at least 6 characters';
+    return null;
+  };
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const response = await api.post('/auth/login', { email, password });
-      localStorage.setItem('token', response.data);
-      navigate('/dashboard');
-    } catch (err) {
-      setError('Invalid email or password');
+    const validationError = validateLogin(email, password);
+    if (validationError) {
+      setError(validationError);
+      return;
     }
   };
 
