@@ -11,7 +11,7 @@ const ItemList: React.FC<ItemListProps> = ({ items, onItemUpdated }) => {
   return (
     <div className="item-list">
       {items.length === 0 ? (
-        <p>No items found</p>
+        <p className="no-items">No items found</p>
       ) : (
         items.map((item) => (
           <ItemCard 

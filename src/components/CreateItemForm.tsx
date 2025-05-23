@@ -32,11 +32,11 @@ const CreateItemForm: React.FC<CreateItemFormProps> = ({ onItemCreated }) => {
   };
 
   return (
-    <div style={{ marginBottom: '20px' }}>
-      <h2>Create New Item</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <div className="create-item-form">
+      <h2>Report New Item</h2>
+      {error && <div className="error-message">{error}</div>}
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="form-group">
           <label>Title</label>
           <input
             type="text"
@@ -46,7 +46,7 @@ const CreateItemForm: React.FC<CreateItemFormProps> = ({ onItemCreated }) => {
             required
           />
         </div>
-        <div>
+        <div className="form-group">
           <label>Description</label>
           <input
             type="text"
@@ -56,7 +56,7 @@ const CreateItemForm: React.FC<CreateItemFormProps> = ({ onItemCreated }) => {
             required
           />
         </div>
-        <div>
+        <div className="form-group">
           <label>Location</label>
           <input
             type="text"
@@ -66,7 +66,7 @@ const CreateItemForm: React.FC<CreateItemFormProps> = ({ onItemCreated }) => {
             required
           />
         </div>
-        <div>
+        <div className="form-group">
           <label>Status</label>
           <select
             name="status"
@@ -78,7 +78,9 @@ const CreateItemForm: React.FC<CreateItemFormProps> = ({ onItemCreated }) => {
             <option value="CLAIMED">Claimed</option>
           </select>
         </div>
-        <button type="submit">Create Item</button>
+        <button type="submit" className="submit-button">
+          Create Item
+        </button>
       </form>
     </div>
   );
