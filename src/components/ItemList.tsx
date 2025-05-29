@@ -1,26 +1,47 @@
-import React from 'react';
-import { Item } from '../types/types';
-import ItemCard from './ItemCard';
+import { useEffect, useState } from 'react';
+import apiClient from '../api/client';
 
-interface ItemListProps {
-  items: Item[];
-  onItemUpdated: () => void;
+interface Item {
+  id: number;
+  title: string;
+  description: string;
+  status: 'LOST' | 'FOUND' | 'CLAIMED';
 }
 
-const ItemList: React.FC<ItemListProps> = ({ items, onItemUpdated }) => {
+const ItemList = () => {
+  const [items, setItems] = useState<Item[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const response = await apiClient.get('/secure/items');
+        setItems(response.data);
+      } catch (err) {
+        setError('Failed to fetch items');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchItems();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+
   return (
-    <div className="item-list">
-      {items.length === 0 ? (
-        <p className="no-items">No items found</p>
-      ) : (
-        items.map((item) => (
-          <ItemCard 
-            key={item.id} 
-            item={item} 
-            onItemUpdated={onItemUpdated} 
-          />
-        ))
-      )}
+    <div>
+      <h2>Items</h2>
+      <ul>
+        {items.map((item) => (
+          <li key={item.id}>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+            <p>Status: {item.status}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

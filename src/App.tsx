@@ -1,32 +1,32 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import DashboardPage from './pages/DashboardPage';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
 
-const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const token = localStorage.getItem('token');
-  return token ? <>{children}</> : <Navigate to="/login" replace />;
-};
-
-const App: React.FC = () => {
+function App() {
   return (
-    <BrowserRouter>
+     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <DashboardPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/" element={<LoginPage />} />
-        <Route path="*" element={<h1>404 Not Found</h1>} />
+        {/* Public routes */}
+        <Route path="/login" element={
+          localStorage.getItem('token') ? <Navigate to="/dashboard" /> : <Login />
+        } />
+        <Route path="/register" element={
+          localStorage.getItem('token') ? <Navigate to="/dashboard" /> : <Register />
+        } />
+
+        {/* Protected routes */}
+        <Route path="/dashboard" element={
+          localStorage.getItem('token') ? <Dashboard /> : <Navigate to="/login" />
+        } />
+        
+        {/* Default redirect */}
+        <Route path="/" element={
+          localStorage.getItem('token') ? <Navigate to="/dashboard" /> : <Navigate to="/login" />
+        } />
       </Routes>
     </BrowserRouter>
   );
-};
+}
 
 export default App;
