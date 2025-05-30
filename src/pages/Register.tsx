@@ -7,6 +7,7 @@ const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('USER');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -15,14 +16,13 @@ const Register = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
     
     try {
       await apiClient.post('/auth/register', { 
         name, 
         email, 
         password,
-        role: 'USER' 
+        role
       });
       setSuccess(true);
       setTimeout(() => navigate('/login'), 2000);
@@ -36,7 +36,7 @@ const Register = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h2>Create New Account</h2>
+        <h2>Create Account</h2>
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
             <label>Full Name</label>
@@ -66,6 +66,19 @@ const Register = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+          </div>
+
+          <div className="form-group">
+            <label>Account Type</label>
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="role-select"
+            >
+              <option value="USER">Regular User</option>
+              <option value="STAFF">Campus Staff</option>
+              <option value="ADMIN">Administrator</option>
+            </select>
           </div>
 
           {error && <div className="error-message">{error}</div>}
