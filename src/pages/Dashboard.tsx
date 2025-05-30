@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ItemList from '../components/ItemList';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -20,7 +19,6 @@ const Dashboard = () => {
     <div>
       <h1>Dashboard</h1>
       <button onClick={handleLogout}>Logout</button>
-      <ItemList />
     </div>
   );
 };
