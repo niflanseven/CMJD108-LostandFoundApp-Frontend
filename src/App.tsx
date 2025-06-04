@@ -1,31 +1,38 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import Header from './components/layout/Header';
+import ProtectedRoute from './components/layout/ProtectedRoute';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import DashboardPage from './pages/DashboardPage';
+import ItemsPage from './pages/ItemsPage';
+import ProfilePage from './pages/ProfilePage';
+import { Container } from '@mui/material';
+import './App.css';
 
 function App() {
   return (
-     <BrowserRouter>
-      <Routes>
-        {/* Public routes */}
-        <Route path="/login" element={
-          localStorage.getItem('token') ? <Navigate to="/dashboard" /> : <Login />
-        } />
-        <Route path="/register" element={
-          localStorage.getItem('token') ? <Navigate to="/dashboard" /> : <Register />
-        } />
-
-        {/* Protected routes */}
-        <Route path="/dashboard" element={
-          localStorage.getItem('token') ? <Dashboard /> : <Navigate to="/login" />
-        } />
-        
-        {/* Default redirect */}
-        <Route path="/" element={
-          localStorage.getItem('token') ? <Navigate to="/dashboard" /> : <Navigate to="/login" />
-        } />
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <Router>
+        <Header />
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            
+            <Route element={<ProtectedRoute />}>
+              <Route path="/" element={<DashboardPage />} />
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/items" element={<ItemsPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+            </Route>
+            
+            <Route path="*" element={<LoginPage />} />
+          </Routes>
+        </Container>
+      </Router>
+    </AuthProvider>
   );
 }
 
